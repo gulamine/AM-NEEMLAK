@@ -8,27 +8,24 @@
   <script src="/_sdk/element_sdk.js"></script>
   <script src="/_sdk/data_sdk.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <style>
-        .font-heading { font-family: 'Playfair Display', serif; }
-        .font-body { font-family: 'Montserrat', sans-serif; }
-        .gradient-overlay {
-            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(52, 73, 94, 0.9) 100%);
-        }
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-        .image-preview {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .region-badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-    </style>
-  <style>body { box-sizing: border-box; }</style>
+    .font-heading { font-family: 'Playfair Display', serif; }
+    .font-body { font-family: 'Montserrat', sans-serif; }
+    .gradient-overlay {
+      background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(52, 73, 94, 0.9) 100%);
+    }
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    #map {
+      height: 500px;
+      border-radius: 12px;
+    }
+    body { box-sizing: border-box; }
+  </style>
  </head>
  <body class="h-full font-body bg-gray-50">
   <div id="app" class="h-full w-full overflow-auto"><!-- Header -->
@@ -55,549 +52,302 @@
      <h2 class="font-heading text-4xl md:text-5xl font-bold mb-4">Marmaris'te Emlak Arayanların Adresi</h2>
      <p class="text-xl text-gray-300 mb-8">Cennet köşesinde hayalinizdeki mülkü bulun</p><!-- Search/Filter -->
      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-4xl mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4"><select id="filter-region" class="px-4 py-3 rounded-xl bg-white text-gray-800 font-medium focus:ring-2 focus:ring-amber-400"> <option value="">Tüm Bölgeler</option> <option value="Merkez">Merkez</option> <option value="İçmeler">İçmeler</option> <option value="Armutalan">Armutalan</option> <option value="Beldibi">Beldibi</option> <option value="Siteler">Siteler</option> <option value="Turunç">Turunç</option> <option value="Orhaniye">Orhaniye</option> <option value="Selimiye">Selimiye</option> <option value="Bozburun">Bozburun</option> <option value="Söğüt">Söğüt</option> <option value="Hisarönü">Hisarönü</option> <option value="Datça Yolu">Datça Yolu</option> </select> <select id="filter-type" class="px-4 py-3 rounded-xl bg-white text-gray-800 font-medium focus:ring-2 focus:ring-amber-400"> <option value="">Tüm Türler</option> <option value="Satılık">Satılık</option> <option value="Kiralık">Kiralık</option> </select> <select id="filter-property" class="px-4 py-3 rounded-xl bg-white text-gray-800 font-medium focus:ring-2 focus:ring-amber-400"> <option value="">Tüm Mülkler</option> <option value="Daire">Daire</option> <option value="Villa">Villa</option> <option value="Müstakil Ev">Müstakil Ev</option> <option value="Arsa">Arsa</option> <option value="İşyeri">İşyeri</option> </select> <button id="clear-filter" class="px-4 py-3 rounded-xl bg-amber-400 text-gray-900 font-semibold hover:bg-amber-300 transition"> Filtreleri Temizle </button>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4"><select id="filter-region" class="px-4 py-3 rounded-xl bg-white text-gray-800 font-medium focus:ring-2 focus:ring-amber-400"> <option value="">Tüm Bölgeler</option> <option value="Merkez">Merkez</option> <option value="İçmeler">İçmeler</option> <option value="Armutalan">Armutalan</option> <option value="Beldibi">Beldibi</option> <option value="Siteler">Siteler</option> <option value="Turunç">Turunç</option> <option value="Orhaniye">Orhaniye</option> <option value="Selimiye">Selimiye</option> <option value="Bozburun">Bozburun</option> <option value="Söğüt">Söğüt</option> <option value="Hisarönü">Hisarönü</option> <option value="Datça Yolu">Datça Yolu</option> </select> <select id="filter-type" class="px-4 py-3 rounded-xl bg-white text-gray-800 font-medium focus:ring-2 focus:ring-amber-400"> <option value="">Tüm Türler</option> <option value="Satılık">Satılık</option> <option value="Kiralık">Kiralık</option> </select> <select id="filter-property" class="px-4 py-3 rounded-xl bg-white text-gray-800 font-medium focus:ring-2 focus:ring-amber-400"> <option value="">Tüm Türler</option> <option value="Daire">Daire</option> <option value="Villa">Villa</option> <option value="Bina">Bina</option> <option value="Arsa">Arsa</option> <option value="İşyeri">İşyeri</option> </select> <button id="btn-search" class="bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold px-6 py-3 rounded-xl transition">Ara</button>
       </div>
      </div>
     </div>
-   </section><!-- Regions Section -->
-   <section class="py-12 px-4 bg-white">
+   </section><!-- Map Section -->
+   <section id="map-section" class="py-12 px-4 bg-white">
     <div class="max-w-7xl mx-auto">
-     <h3 class="font-heading text-3xl font-bold text-center text-gray-800 mb-8">Marmaris Bölgeleri</h3>
-     <div class="flex flex-wrap justify-center gap-3"><span class="region-badge text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition" data-region="Merkez">🏙️ Merkez</span> <span class="region-badge text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition" data-region="İçmeler">🏖️ İçmeler</span> <span class="region-badge text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition" data-region="Armutalan">🌳 Armutalan</span> <span class="region-badge text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition" data-region="Beldibi">🌊 Beldibi</span> <span class="region-badge text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition" data-region="Siteler">🏘️ Siteler</span> <span class="region-badge text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition" data-region="Turunç">🌅 Turunç</span> <span class="region-badge text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition" data-region="Orhaniye">⛵ Orhaniye</span> <span class="region-badge text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition" data-region="Selimiye">🐚 Selimiye</span> <span class="region-badge text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition" data-region="Bozburun">🚤 Bozburun</span> <span class="region-badge text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition" data-region="Söğüt">🌿 Söğüt</span> <span class="region-badge text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition" data-region="Hisarönü">🏔️ Hisarönü</span> <span class="region-badge text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition" data-region="Datça Yolu">🛤️ Datça Yolu</span>
+     <h2 class="font-heading text-3xl font-bold text-gray-800 mb-2">Marmaris Konumu</h2>
+     <p class="text-gray-600 mb-8">Ürünlerin Marmaris'te nerede bulunduğunu harita üzerinde görebilirsiniz</p>
+     <div id="map" class="w-full border border-gray-200"></div>
+    </div>
+   </section><!-- Properties Section -->
+   <section id="properties" class="py-16 px-4">
+    <div class="max-w-7xl mx-auto">
+     <h2 class="font-heading text-3xl font-bold text-gray-800 mb-2">Aktif İlanlar</h2>
+     <p class="text-gray-600 mb-8">Tüm mevcut ilanlarımız</p>
+     <div id="properties-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"><!-- Properties will be loaded here -->
+      <div class="col-span-full text-center py-12 text-gray-500">
+       <p class="text-lg">Henüz ilan yok. Aşağıdan ilk ilanınızı ekleyin.</p>
+      </div>
      </div>
     </div>
    </section><!-- Add Property Section -->
-   <section id="add" class="py-12 px-4" style="background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);">
+   <section id="add" class="py-16 px-4 bg-gradient-to-b from-gray-50 to-gray-100">
     <div class="max-w-4xl mx-auto">
-     <h3 class="font-heading text-3xl font-bold text-center text-gray-800 mb-8">Yeni İlan Ekle</h3>
-     <form id="property-form" class="bg-white rounded-2xl shadow-xl p-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-       <div class="md:col-span-2"><label class="block text-gray-700 font-semibold mb-2">İlan Başlığı</label> <input type="text" id="prop-title" required class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-amber-400 focus:ring-0 transition" placeholder="Örn: Deniz Manzaralı 3+1 Villa">
+     <h2 class="font-heading text-3xl font-bold text-gray-800 mb-2">Yeni İlan Ekle</h2>
+     <p class="text-gray-600 mb-8">Mülkünüzü hızlı ve kolay bir şekilde ilanını yayınlayın</p>
+     <form id="property-form" class="bg-white rounded-2xl shadow-lg p-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+       <div><label class="block text-gray-700 font-semibold mb-2">İlan Başlığı *</label> <input type="text" id="form-title" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="Güzel Villa">
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">Bölge</label> <select id="prop-region" required class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-amber-400"> <option value="">Bölge Seçin</option> <option value="Merkez">Merkez</option> <option value="İçmeler">İçmeler</option> <option value="Armutalan">Armutalan</option> <option value="Beldibi">Beldibi</option> <option value="Siteler">Siteler</option> <option value="Turunç">Turunç</option> <option value="Orhaniye">Orhaniye</option> <option value="Selimiye">Selimiye</option> <option value="Bozburun">Bozburun</option> <option value="Söğüt">Söğüt</option> <option value="Hisarönü">Hisarönü</option> <option value="Datça Yolu">Datça Yolu</option> </select>
+       <div><label class="block text-gray-700 font-semibold mb-2">İlan Türü *</label> <select id="form-type" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent"> <option value="">Seçiniz</option> <option value="Satılık">Satılık</option> <option value="Kiralık">Kiralık</option> </select>
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">İlan Türü</label> <select id="prop-listing-type" required class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-amber-400"> <option value="">Tür Seçin</option> <option value="Satılık">Satılık</option> <option value="Kiralık">Kiralık</option> </select>
+       <div><label class="block text-gray-700 font-semibold mb-2">Emlak Türü *</label> <select id="form-property" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent"> <option value="">Seçiniz</option> <option value="Daire">Daire</option> <option value="Villa">Villa</option> <option value="Bina">Bina</option> <option value="Arsa">Arsa</option> <option value="İşyeri">İşyeri</option> </select>
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">Mülk Tipi</label> <select id="prop-type" required class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-amber-400"> <option value="">Mülk Tipi Seçin</option> <option value="Daire">Daire</option> <option value="Villa">Villa</option> <option value="Müstakil Ev">Müstakil Ev</option> <option value="Arsa">Arsa</option> <option value="İşyeri">İşyeri</option> </select>
+       <div><label class="block text-gray-700 font-semibold mb-2">Bölge *</label> <select id="form-region" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent"> <option value="">Seçiniz</option> <option value="Merkez">Merkez</option> <option value="İçmeler">İçmeler</option> <option value="Armutalan">Armutalan</option> <option value="Beldibi">Beldibi</option> <option value="Siteler">Siteler</option> <option value="Turunç">Turunç</option> <option value="Orhaniye">Orhaniye</option> <option value="Selimiye">Selimiye</option> <option value="Bozburun">Bozburun</option> <option value="Söğüt">Söğüt</option> <option value="Hisarönü">Hisarönü</option> <option value="Datça Yolu">Datça Yolu</option> </select>
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">Oda Sayısı</label> <select id="prop-rooms" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-amber-400"> <option value="">Oda Sayısı</option> <option value="1+0">1+0 (Stüdyo)</option> <option value="1+1">1+1</option> <option value="2+1">2+1</option> <option value="3+1">3+1</option> <option value="4+1">4+1</option> <option value="5+1">5+1</option> <option value="6+">6+</option> </select>
+       <div><label class="block text-gray-700 font-semibold mb-2">Fiyat *</label> <input type="text" id="form-price" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="500.000 TL">
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">Alan (m²)</label> <input type="text" id="prop-area" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-amber-400" placeholder="Örn: 150">
+       <div><label class="block text-gray-700 font-semibold mb-2">Metrekare *</label> <input type="text" id="form-area" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="150 m²">
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">Fiyat</label> <input type="text" id="prop-price" required class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-amber-400" placeholder="Örn: 2.500.000 TL">
+       <div><label class="block text-gray-700 font-semibold mb-2">Oda Sayısı</label> <input type="text" id="form-rooms" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="3">
        </div>
-       <div class="md:col-span-2"><label class="block text-gray-700 font-semibold mb-2">Açıklama</label> <textarea id="prop-desc" rows="4" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-amber-400 resize-none" placeholder="Mülk hakkında detaylı bilgi yazın..."></textarea>
+       <div><label class="block text-gray-700 font-semibold mb-2">Banyo Sayısı</label> <input type="text" id="form-bathrooms" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="2">
        </div>
-       <div class="md:col-span-2"><label class="block text-gray-700 font-semibold mb-2">Fotoğraflar (Çoklu Seçim)</label>
-        <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-amber-400 transition cursor-pointer" id="drop-zone"><input type="file" id="prop-images" multiple accept="image/*" class="hidden">
-         <div class="flex flex-col items-center">
-          <svg class="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <p class="text-gray-600 font-medium">Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
-          <p class="text-gray-400 text-sm mt-1">PNG, JPG, WEBP (Çoklu seçim yapabilirsiniz)</p>
-         </div>
+      </div>
+      <div class="mb-6"><label class="block text-gray-700 font-semibold mb-2">Açıklama</label> <textarea id="form-description" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" rows="4" placeholder="Mülk hakkında detaylı bilgi..."></textarea>
+      </div><!-- Location Section -->
+      <div class="mb-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+       <h3 class="font-heading text-lg font-bold text-gray-800 mb-4">📍 Konum Bilgileri</h3>
+       <p class="text-gray-600 text-sm mb-4">Haritada mülkün konumunu işaretleyin veya koordinatları girin</p>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div><label class="block text-gray-700 font-semibold mb-2">Enlem (Latitude)</label> <input type="text" id="form-latitude" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="36.8841">
         </div>
-        <div id="image-preview" class="flex flex-wrap gap-3 mt-4"></div>
+        <div><label class="block text-gray-700 font-semibold mb-2">Boylam (Longitude)</label> <input type="text" id="form-longitude" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="28.2744">
+        </div>
        </div>
-      </div>
-      <div class="mt-8 flex gap-4"><button type="submit" id="submit-btn" class="flex-1 bg-amber-400 text-gray-900 py-4 rounded-xl font-bold text-lg hover:bg-amber-300 transition"> İlanı Yayınla </button> <button type="button" id="clear-form" class="px-8 bg-gray-200 text-gray-700 py-4 rounded-xl font-semibold hover:bg-gray-300 transition"> Temizle </button>
-      </div>
-      <p id="form-message" class="mt-4 text-center font-medium hidden"></p>
+       <div id="location-map" style="height: 300px; border-radius: 8px; border: 2px solid #e5e7eb;"></div>
+       <p class="text-xs text-gray-500 mt-3">💡 İpucu: Harita üzerine tıklayarak konumu işaretleyebilirsiniz</p>
+      </div><button type="submit" class="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-bold py-3 rounded-lg transition transform hover:scale-105"> İlanı Yayınla </button>
      </form>
-    </div>
-   </section><!-- Properties Section -->
-   <section id="properties" class="py-12 px-4 bg-gray-50">
-    <div class="max-w-7xl mx-auto">
-     <div class="flex items-center justify-between mb-8">
-      <h3 class="font-heading text-3xl font-bold text-gray-800">Emlak İlanları</h3><span id="property-count" class="bg-amber-400 text-gray-900 px-4 py-2 rounded-full font-semibold">0 İlan</span>
-     </div>
-     <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Properties will be rendered here -->
-     </div>
-     <div id="no-properties" class="text-center py-16 hidden">
-      <svg class="w-24 h-24 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-      </svg>
-      <p class="text-gray-500 text-xl">Henüz ilan bulunmuyor</p>
-      <p class="text-gray-400 mt-2">İlk ilanınızı eklemek için yukarıdaki formu kullanın</p>
-     </div>
-     <div id="limit-warning" class="hidden mt-6 bg-amber-100 border-2 border-amber-400 rounded-xl p-4 text-center">
-      <p class="text-amber-800 font-semibold">⚠️ Maksimum 999 ilan limitine ulaşıldı. Yeni ilan eklemek için lütfen mevcut ilanlardan birini silin.</p>
-     </div>
     </div>
    </section><!-- Footer -->
    <footer class="gradient-overlay text-white py-8 px-4">
     <div class="max-w-7xl mx-auto text-center">
-     <p class="font-heading text-xl font-bold mb-2">Amine Marmaris Emlak</p>
-     <p class="text-gray-300">Marmaris'in güvenilir emlak danışmanı</p>
-     <p class="text-gray-400 mt-4 text-sm">© 2024 Tüm hakları saklıdır.</p>
+     <p>© 2024 Amine Marmaris Emlak. Tüm hakları saklıdır.</p>
     </div>
    </footer>
-  </div><!-- Property Detail Modal -->
-  <div id="property-modal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-4">
-   <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90%] overflow-auto">
-    <div id="modal-content" class="p-6"><!-- Modal content will be rendered here -->
-    </div>
-   </div>
-  </div><!-- Delete Confirmation -->
-  <div id="delete-confirm" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-4">
-   <div class="bg-white rounded-2xl p-8 max-w-md w-full text-center">
-    <svg class="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-    </svg>
-    <h4 class="font-heading text-2xl font-bold text-gray-800 mb-2">İlanı Silmek İstediğinize Emin Misiniz?</h4>
-    <p class="text-gray-600 mb-6">Bu işlem geri alınamaz.</p>
-    <div class="flex gap-4"><button id="confirm-delete" class="flex-1 bg-red-500 text-white py-3 rounded-xl font-semibold hover:bg-red-600 transition">Evet, Sil</button> <button id="cancel-delete" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-300 transition">İptal</button>
-    </div>
-   </div>
   </div>
   <script>
-        // Configuration
-        const defaultConfig = {
-            site_title: 'Amine Marmaris Emlak',
-            site_slogan: 'Hayalinizdeki Eve Kavuşun',
-            contact_phone: '+90 252 XXX XX XX',
-            primary_color: '#0f3460',
-            secondary_color: '#f8f9fa',
-            accent_color: '#fbbf24',
-            text_color: '#1f2937',
-            card_color: '#ffffff',
-            font_family: 'Montserrat',
-            font_size: 16
-        };
+    // Global state
+    let properties = [];
+    let map = null;
+    let locationMap = null;
+    let mainMarkers = [];
+    let selectedLocation = { lat: 36.8841, lng: 28.2744 };
 
-        let allProperties = [];
-        let selectedImages = [];
-        let deleteTargetId = null;
+    // Data Handler
+    const dataHandler = {
+      onDataChanged(data) {
+        properties = data;
+        renderProperties();
+        updateMainMap();
+      }
+    };
 
-        // Data Handler
-        const dataHandler = {
-            onDataChanged(data) {
-                allProperties = data;
-                renderProperties();
-                updatePropertyCount();
-            }
-        };
+    // SDK Configuration
+    const defaultConfig = {
+      site_title: "Amine Marmaris Emlak",
+      site_slogan: "Hayalinizdeki Eve Kavuşun",
+      contact_phone: "+90 252 XXX XX XX"
+    };
 
-        // Initialize SDKs
-        async function initApp() {
-            // Initialize Element SDK
-            if (window.elementSdk) {
-                window.elementSdk.init({
-                    defaultConfig,
-                    onConfigChange: async (config) => {
-                        document.getElementById('site-title').textContent = config.site_title || defaultConfig.site_title;
-                        document.getElementById('site-slogan').textContent = config.site_slogan || defaultConfig.site_slogan;
-                        document.getElementById('contact-phone').textContent = config.contact_phone || defaultConfig.contact_phone;
-                        
-                        const fontFamily = config.font_family || defaultConfig.font_family;
-                        document.body.style.fontFamily = `${fontFamily}, sans-serif`;
-                    },
-                    mapToCapabilities: (config) => ({
-                        recolorables: [
-                            {
-                                get: () => config.primary_color || defaultConfig.primary_color,
-                                set: (v) => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }
-                            },
-                            {
-                                get: () => config.secondary_color || defaultConfig.secondary_color,
-                                set: (v) => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }
-                            },
-                            {
-                                get: () => config.accent_color || defaultConfig.accent_color,
-                                set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); }
-                            },
-                            {
-                                get: () => config.text_color || defaultConfig.text_color,
-                                set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
-                            },
-                            {
-                                get: () => config.card_color || defaultConfig.card_color,
-                                set: (v) => { config.card_color = v; window.elementSdk.setConfig({ card_color: v }); }
-                            }
-                        ],
-                        borderables: [],
-                        fontEditable: {
-                            get: () => config.font_family || defaultConfig.font_family,
-                            set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
-                        },
-                        fontSizeable: {
-                            get: () => config.font_size || defaultConfig.font_size,
-                            set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
-                        }
-                    }),
-                    mapToEditPanelValues: (config) => new Map([
-                        ['site_title', config.site_title || defaultConfig.site_title],
-                        ['site_slogan', config.site_slogan || defaultConfig.site_slogan],
-                        ['contact_phone', config.contact_phone || defaultConfig.contact_phone]
-                    ])
-                });
-            }
+    // Initialize SDKs
+    (async () => {
+      if (window.elementSdk) {
+        await window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: (config) => {
+            document.getElementById('site-title').textContent = config.site_title || defaultConfig.site_title;
+            document.getElementById('site-slogan').textContent = config.site_slogan || defaultConfig.site_slogan;
+            document.getElementById('contact-phone').textContent = config.contact_phone || defaultConfig.contact_phone;
+          },
+          mapToCapabilities: () => ({
+            recolorables: [],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ["site_title", config.site_title],
+            ["site_slogan", config.site_slogan],
+            ["contact_phone", config.contact_phone]
+          ])
+        });
+      }
 
-            // Initialize Data SDK
-            if (window.dataSdk) {
-                const result = await window.dataSdk.init(dataHandler);
-                if (!result.isOk) {
-                    console.error('Data SDK initialization failed');
-                }
-            }
-
-            setupEventListeners();
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error("Data SDK initialization failed");
         }
+      }
 
-        function setupEventListeners() {
-            // Form submission
-            document.getElementById('property-form').addEventListener('submit', handleFormSubmit);
-            
-            // Clear form
-            document.getElementById('clear-form').addEventListener('click', clearForm);
-            
-            // Image upload
-            const dropZone = document.getElementById('drop-zone');
-            const imageInput = document.getElementById('prop-images');
-            
-            dropZone.addEventListener('click', () => imageInput.click());
-            
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.classList.add('border-amber-400', 'bg-amber-50');
-            });
-            
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.classList.remove('border-amber-400', 'bg-amber-50');
-            });
-            
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.classList.remove('border-amber-400', 'bg-amber-50');
-                handleImageSelect(e.dataTransfer.files);
-            });
-            
-            imageInput.addEventListener('change', (e) => {
-                handleImageSelect(e.target.files);
-            });
+      // Initialize maps
+      initMainMap();
+      initLocationMap();
+    })();
 
-            // Filters
-            document.getElementById('filter-region').addEventListener('change', renderProperties);
-            document.getElementById('filter-type').addEventListener('change', renderProperties);
-            document.getElementById('filter-property').addEventListener('change', renderProperties);
-            document.getElementById('clear-filter').addEventListener('click', clearFilters);
+    // Initialize main map for viewing properties
+    function initMainMap() {
+      map = L.map('map').setView([36.8841, 28.2744], 12);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+    }
 
-            // Region badges
-            document.querySelectorAll('[data-region]').forEach(badge => {
-                badge.addEventListener('click', () => {
-                    document.getElementById('filter-region').value = badge.dataset.region;
-                    renderProperties();
-                    document.getElementById('properties').scrollIntoView({ behavior: 'smooth' });
-                });
-            });
+    // Initialize location map for form
+    function initLocationMap() {
+      locationMap = L.map('location-map').setView([36.8841, 28.2744], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(locationMap);
 
-            // Modal close
-            document.getElementById('property-modal').addEventListener('click', (e) => {
-                if (e.target.id === 'property-modal') closeModal();
-            });
+      locationMap.on('click', (e) => {
+        selectedLocation = { lat: e.latlng.lat, lng: e.latlng.lng };
+        document.getElementById('form-latitude').value = e.latlng.lat.toFixed(4);
+        document.getElementById('form-longitude').value = e.latlng.lng.toFixed(4);
+        updateLocationMarker();
+      });
 
-            // Delete confirmation
-            document.getElementById('confirm-delete').addEventListener('click', confirmDelete);
-            document.getElementById('cancel-delete').addEventListener('click', closeDeleteConfirm);
+      updateLocationMarker();
+    }
+
+    // Update location marker on form map
+    function updateLocationMarker() {
+      locationMap.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          locationMap.removeLayer(layer);
         }
+      });
+      L.marker([selectedLocation.lat, selectedLocation.lng]).addTo(locationMap);
+    }
 
-        function handleImageSelect(files) {
-            const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
-            
-            validFiles.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    selectedImages.push(e.target.result);
-                    renderImagePreviews();
-                };
-                reader.readAsDataURL(file);
-            });
+    // Update main map with property markers
+    function updateMainMap() {
+      mainMarkers.forEach(marker => map.removeLayer(marker));
+      mainMarkers = [];
+
+      properties.forEach(prop => {
+        if (prop.latitude && prop.longitude) {
+          const marker = L.marker([parseFloat(prop.latitude), parseFloat(prop.longitude)])
+            .bindPopup(`<div class="font-semibold">${prop.title}</div><div class="text-sm">${prop.price}</div>`)
+            .addTo(map);
+          mainMarkers.push(marker);
         }
+      });
+    }
 
-        function renderImagePreviews() {
-            const container = document.getElementById('image-preview');
-            container.innerHTML = selectedImages.map((img, idx) => `
-                <div class="relative group">
-                    <img src="${img}" class="image-preview" alt="Önizleme ${idx + 1}">
-                    <button type="button" onclick="removeImage(${idx})" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
-            `).join('');
+    // Render properties
+    function renderProperties() {
+      const list = document.getElementById('properties-list');
+      
+      if (properties.length === 0) {
+        list.innerHTML = '<div class="col-span-full text-center py-12 text-gray-500"><p class="text-lg">Henüz ilan yok. Aşağıdan ilk ilanınızı ekleyin.</p></div>';
+        return;
+      }
+
+      list.innerHTML = properties.map(prop => `
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover border border-gray-200">
+          <div class="h-48 bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center">
+            <svg class="w-16 h-16 text-white opacity-50" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 3L4 9v12h16V9l-8-6zm0 2.5L18 10v9H6v-9l6-4.5z" />
+            </svg>
+          </div>
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-3">
+              <h3 class="font-heading text-xl font-bold text-gray-800 flex-1">${prop.title}</h3>
+              <span class="region-badge text-white px-3 py-1 rounded-full text-xs font-semibold">${prop.region}</span>
+            </div>
+            <p class="text-gray-600 text-sm mb-4">${prop.description || 'Açıklama yok'}</p>
+            <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+              <div><span class="text-gray-600">Tür:</span> <span class="font-semibold">${prop.type}</span></div>
+              <div><span class="text-gray-600">Emlak:</span> <span class="font-semibold">${prop.property || '-'}</span></div>
+              <div><span class="text-gray-600">Alan:</span> <span class="font-semibold">${prop.area}</span></div>
+              <div><span class="text-gray-600">Oda:</span> <span class="font-semibold">${prop.rooms || '-'}</span></div>
+            </div>
+            <div class="border-t pt-4">
+              <p class="text-2xl font-bold text-amber-500">${prop.price}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Form submission
+    document.getElementById('property-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const newProperty = {
+        id: Date.now().toString(),
+        title: document.getElementById('form-title').value,
+        type: document.getElementById('form-type').value,
+        property: document.getElementById('form-property').value,
+        region: document.getElementById('form-region').value,
+        price: document.getElementById('form-price').value,
+        area: document.getElementById('form-area').value,
+        rooms: document.getElementById('form-rooms').value,
+        bathrooms: document.getElementById('form-bathrooms').value,
+        description: document.getElementById('form-description').value,
+        latitude: document.getElementById('form-latitude').value || selectedLocation.lat.toString(),
+        longitude: document.getElementById('form-longitude').value || selectedLocation.lng.toString(),
+        createdAt: new Date().toISOString()
+      };
+
+      if (window.dataSdk) {
+        const result = await window.dataSdk.create(newProperty);
+        if (!result.isOk) {
+          alert('Hata: İlan eklenemedi');
+          return;
         }
+      } else {
+        properties.push(newProperty);
+        renderProperties();
+        updateMainMap();
+      }
 
-        window.removeImage = function(idx) {
-            selectedImages.splice(idx, 1);
-            renderImagePreviews();
-        };
+      document.getElementById('property-form').reset();
+      selectedLocation = { lat: 36.8841, lng: 28.2744 };
+      updateLocationMarker();
+    });
 
-        async function handleFormSubmit(e) {
-            e.preventDefault();
-            
-            if (allProperties.length >= 999) {
-                document.getElementById('limit-warning').classList.remove('hidden');
-                return;
-            }
+    // Search/Filter
+    document.getElementById('btn-search').addEventListener('click', () => {
+      const region = document.getElementById('filter-region').value;
+      const type = document.getElementById('filter-type').value;
+      const property = document.getElementById('filter-property').value;
 
-            const submitBtn = document.getElementById('submit-btn');
-            const formMessage = document.getElementById('form-message');
-            
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Kaydediliyor...';
+      const filtered = properties.filter(p => {
+        if (region && p.region !== region) return false;
+        if (type && p.type !== type) return false;
+        if (property && p.property !== property) return false;
+        return true;
+      });
 
-            const property = {
-                id: Date.now().toString(),
-                title: document.getElementById('prop-title').value,
-                region: document.getElementById('prop-region').value,
-                property_type: `${document.getElementById('prop-listing-type').value} ${document.getElementById('prop-type').value}`,
-                rooms: document.getElementById('prop-rooms').value || '-',
-                area: document.getElementById('prop-area').value || '-',
-                price: document.getElementById('prop-price').value,
-                description: document.getElementById('prop-desc').value || '',
-                images: selectedImages.join('|||'),
-                created_at: new Date().toISOString()
-            };
-
-            const result = await window.dataSdk.create(property);
-            
-            if (result.isOk) {
-                formMessage.textContent = '✓ İlan başarıyla eklendi!';
-                formMessage.className = 'mt-4 text-center font-medium text-green-600';
-                formMessage.classList.remove('hidden');
-                clearForm();
-                setTimeout(() => formMessage.classList.add('hidden'), 3000);
-            } else {
-                formMessage.textContent = '✗ Bir hata oluştu, lütfen tekrar deneyin.';
-                formMessage.className = 'mt-4 text-center font-medium text-red-600';
-                formMessage.classList.remove('hidden');
-            }
-
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'İlanı Yayınla';
-        }
-
-        function clearForm() {
-            document.getElementById('property-form').reset();
-            selectedImages = [];
-            renderImagePreviews();
-        }
-
-        function clearFilters() {
-            document.getElementById('filter-region').value = '';
-            document.getElementById('filter-type').value = '';
-            document.getElementById('filter-property').value = '';
-            renderProperties();
-        }
-
-        function renderProperties() {
-            const regionFilter = document.getElementById('filter-region').value;
-            const typeFilter = document.getElementById('filter-type').value;
-            const propertyFilter = document.getElementById('filter-property').value;
-
-            let filtered = [...allProperties];
-
-            if (regionFilter) {
-                filtered = filtered.filter(p => p.region === regionFilter);
-            }
-            if (typeFilter) {
-                filtered = filtered.filter(p => p.property_type.includes(typeFilter));
-            }
-            if (propertyFilter) {
-                filtered = filtered.filter(p => p.property_type.includes(propertyFilter));
-            }
-
-            const grid = document.getElementById('properties-grid');
-            const noProps = document.getElementById('no-properties');
-
-            if (filtered.length === 0) {
-                grid.innerHTML = '';
-                noProps.classList.remove('hidden');
-            } else {
-                noProps.classList.add('hidden');
-                
-                // Update existing cards or create new ones
-                const existingCards = new Map([...grid.children].map(el => [el.dataset.id, el]));
-                
-                filtered.forEach(prop => {
-                    if (existingCards.has(prop.id)) {
-                        updatePropertyCard(existingCards.get(prop.id), prop);
-                        existingCards.delete(prop.id);
-                    } else {
-                        grid.appendChild(createPropertyCard(prop));
-                    }
-                });
-
-                existingCards.forEach(el => el.remove());
-            }
-        }
-
-        function createPropertyCard(prop) {
-            const images = prop.images ? prop.images.split('|||') : [];
-            const firstImage = images[0];
-            
-            const card = document.createElement('div');
-            card.className = 'bg-white rounded-2xl shadow-lg overflow-hidden card-hover transition-all duration-300 cursor-pointer';
-            card.dataset.id = prop.id;
-            card.onclick = () => openModal(prop);
-            
-            card.innerHTML = `
-                <div class="h-48 bg-gradient-to-br from-gray-200 to-gray-300 relative overflow-hidden">
-                    ${firstImage ? `<img src="${firstImage}" class="w-full h-full object-cover" alt="${prop.title}" loading="lazy" onerror="this.style.display='none'">` : `
-                    <div class="flex items-center justify-center h-full">
-                        <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                    </div>
-                    `}
-                    <div class="absolute top-3 left-3">
-                        <span class="bg-amber-400 text-gray-900 px-3 py-1 rounded-full text-sm font-semibold">${prop.property_type}</span>
-                    </div>
-                    ${images.length > 1 ? `<div class="absolute top-3 right-3 bg-black/50 text-white px-2 py-1 rounded-lg text-xs">📷 ${images.length}</div>` : ''}
-                </div>
-                <div class="p-5">
-                    <h4 class="font-heading text-lg font-bold text-gray-800 mb-2 line-clamp-2">${prop.title}</h4>
-                    <p class="text-gray-500 text-sm mb-3 flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                        ${prop.region}
-                    </p>
-                    <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                        <span>🛏️ ${prop.rooms}</span>
-                        <span>📐 ${prop.area} m²</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <p class="text-xl font-bold text-amber-500">${prop.price}</p>
-                        <button onclick="event.stopPropagation(); showDeleteConfirm('${prop.__backendId}')" class="text-gray-400 hover:text-red-500 transition p-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            return card;
-        }
-
-        function updatePropertyCard(card, prop) {
-            const images = prop.images ? prop.images.split('|||') : [];
-            const titleEl = card.querySelector('h4');
-            const regionEl = card.querySelector('.text-gray-500');
-            const priceEl = card.querySelector('.text-amber-500');
-            
-            if (titleEl) titleEl.textContent = prop.title;
-            if (priceEl) priceEl.textContent = prop.price;
-            
-            card.onclick = () => openModal(prop);
-        }
-
-        function updatePropertyCount() {
-            document.getElementById('property-count').textContent = `${allProperties.length} İlan`;
-            
-            if (allProperties.length >= 999) {
-                document.getElementById('limit-warning').classList.remove('hidden');
-            } else {
-                document.getElementById('limit-warning').classList.add('hidden');
-            }
-        }
-
-        function openModal(prop) {
-            const images = prop.images ? prop.images.split('|||') : [];
-            const modal = document.getElementById('property-modal');
-            const content = document.getElementById('modal-content');
-            
-            content.innerHTML = `
-                <div class="flex justify-between items-start mb-4">
-                    <h3 class="font-heading text-2xl font-bold text-gray-800">${prop.title}</h3>
-                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 p-2">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
-                
-                ${images.length > 0 ? `
-                <div class="mb-6">
-                    <div class="grid grid-cols-${Math.min(images.length, 3)} gap-2">
-                        ${images.map((img, idx) => `
-                            <img src="${img}" class="w-full h-48 object-cover rounded-xl ${idx === 0 ? 'col-span-full h-64' : ''}" alt="Fotoğraf ${idx + 1}" loading="lazy">
-                        `).join('')}
-                    </div>
-                </div>
-                ` : ''}
-                
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-gray-100 rounded-xl p-4">
-                        <p class="text-gray-500 text-sm">Bölge</p>
-                        <p class="font-semibold text-gray-800">${prop.region}</p>
-                    </div>
-                    <div class="bg-gray-100 rounded-xl p-4">
-                        <p class="text-gray-500 text-sm">Tür</p>
-                        <p class="font-semibold text-gray-800">${prop.property_type}</p>
-                    </div>
-                    <div class="bg-gray-100 rounded-xl p-4">
-                        <p class="text-gray-500 text-sm">Oda Sayısı</p>
-                        <p class="font-semibold text-gray-800">${prop.rooms}</p>
-                    </div>
-                    <div class="bg-gray-100 rounded-xl p-4">
-                        <p class="text-gray-500 text-sm">Alan</p>
-                        <p class="font-semibold text-gray-800">${prop.area} m²</p>
-                    </div>
-                </div>
-                
-                ${prop.description ? `
-                <div class="mb-6">
-                    <h4 class="font-semibold text-gray-800 mb-2">Açıklama</h4>
-                    <p class="text-gray-600">${prop.description}</p>
-                </div>
-                ` : ''}
-                
-                <div class="bg-amber-50 rounded-xl p-6 text-center">
-                    <p class="text-gray-600 mb-2">Fiyat</p>
-                    <p class="text-3xl font-bold text-amber-500">${prop.price}</p>
-                </div>
-            `;
-            
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        window.closeModal = function() {
-            const modal = document.getElementById('property-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        };
-
-        window.showDeleteConfirm = function(backendId) {
-            deleteTargetId = backendId;
-            const confirm = document.getElementById('delete-confirm');
-            confirm.classList.remove('hidden');
-            confirm.classList.add('flex');
-        };
-
-        function closeDeleteConfirm() {
-            deleteTargetId = null;
-            const confirm = document.getElementById('delete-confirm');
-            confirm.classList.add('hidden');
-            confirm.classList.remove('flex');
-        }
-
-        async function confirmDelete() {
-            if (!deleteTargetId) return;
-            
-            const confirmBtn = document.getElementById('confirm-delete');
-            confirmBtn.disabled = true;
-            confirmBtn.textContent = 'Siliniyor...';
-            
-            const property = allProperties.find(p => p.__backendId === deleteTargetId);
-            
-            if (property) {
-                const result = await window.dataSdk.delete(property);
-                if (!result.isOk) {
-                    console.error('Delete failed');
-                }
-            }
-            
-            confirmBtn.disabled = false;
-            confirmBtn.textContent = 'Evet, Sil';
-            closeDeleteConfirm();
-        }
-
-        // Initialize app
-        initApp();
-    </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9db1ada7043a561e',t:'MTc3MzMwNjc1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+      const list = document.getElementById('properties-list');
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="col-span-full text-center py-12 text-gray-500"><p class="text-lg">Arama kriterlerine uygun ilan bulunamadı.</p></div>';
+      } else {
+        list.innerHTML = filtered.map(prop => `
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover border border-gray-200">
+            <div class="h-48 bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center">
+              <svg class="w-16 h-16 text-white opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 3L4 9v12h16V9l-8-6zm0 2.5L18 10v9H6v-9l6-4.5z" />
+              </svg>
+            </div>
+            <div class="p-6">
+              <div class="flex items-start justify-between mb-3">
+                <h3 class="font-heading text-xl font-bold text-gray-800 flex-1">${prop.title}</h3>
+                <span class="region-badge text-white px-3 py-1 rounded-full text-xs font-semibold">${prop.region}</span>
+              </div>
+              <p class="text-gray-600 text-sm mb-4">${prop.description || 'Açıklama yok'}</p>
+              <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                <div><span class="text-gray-600">Tür:</span> <span class="font-semibold">${prop.type}</span></div>
+                <div><span class="text-gray-600">Emlak:</span> <span class="font-semibold">${prop.property || '-'}</span></div>
+                <div><span class="text-gray-600">Alan:</span> <span class="font-semibold">${prop.area}</span></div>
+                <div><span class="text-gray-600">Oda:</span> <span class="font-semibold">${prop.rooms || '-'}</span></div>
+              </div>
+              <div class="border-t pt-4">
+                <p class="text-2xl font-bold text-amber-500">${prop.price}</p>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9db1d35c70d9561e',t:'MTc3MzMwODMwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
