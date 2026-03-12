@@ -31,13 +31,15 @@
   </style>
  </head>
  <body class="h-full font-body bg-gray-50">
-  <div id="app" class="h-full w-full overflow-auto"><!-- Header -->
+  <div id="app" class="h-full w-full overflow-auto">
+   <!-- Header -->
    <header class="gradient-overlay text-white sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 py-4">
      <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
        <div class="w-12 h-12 bg-amber-400 rounded-full flex items-center justify-center">
-        <svg class="w-7 h-7 text-gray-900" fill="currentColor" viewbox="0 0 24 24"><path d="M12 3L4 9v12h16V9l-8-6zm0 2.5L18 10v9H6v-9l6-4.5z" /> <rect x="10" y="14" width="4" height="5" />
+        <svg class="w-7 h-7 text-gray-900" fill="currentColor" viewbox="0 0 24 24">
+         <path d="M12 3L4 9v12h16V9l-8-6zm0 2.5L18 10v9H6v-9l6-4.5z" /> <rect x="10" y="14" width="4" height="5" />
         </svg>
        </div>
        <div>
@@ -45,7 +47,8 @@
         <p id="site-slogan" class="text-amber-300 text-sm">Hayalinizdeki Eve Kavuşun</p>
        </div>
       </div>
-      <div class="hidden md:flex items-center gap-6"><a href="#properties" class="hover:text-amber-300 transition">İlanlar</a> <a href="#about-amine" class="hover:text-amber-300 transition">Hakkımda</a> <a href="#add" class="hover:text-amber-300 transition">İlan Ekle</a> <span id="contact-phone" class="bg-amber-400 text-gray-900 px-4 py-2 rounded-full font-semibold">+90 252 XXX XX XX</span>
+      <div class="hidden md:flex items-center gap-6">
+       <a href="#properties" class="hover:text-amber-300 transition">İlanlar</a> <a href="#about-amine" class="hover:text-amber-300 transition">Hakkımda</a> <a href="#add" class="hover:text-amber-300 transition">İlan Ekle</a> <span id="contact-phone" class="bg-amber-400 text-gray-900 px-4 py-2 rounded-full font-semibold">+90 252 XXX XX XX</span>
       </div>
      </div>
     </div>
@@ -55,7 +58,8 @@
      <h2 class="font-heading text-4xl md:text-5xl font-bold mb-4">Marmaris'te Emlak Arayanların Adresi</h2>
      <p class="text-xl text-gray-300 mb-8">Cennet köşesinde hayalinizdeki mülkü bulun</p><!-- Search/Filter -->
      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-4xl mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4"><select id="filter-region" class="px-4 py-3 rounded-xl bg-white text-gray-800 font-medium focus:ring-2 focus:ring-amber-400"> <option value="">Tüm Bölgeler</option> <option value="Merkez">Merkez</option> <option value="İçmeler">İçmeler</option> <option value="Armutalan">Armutalan</option> <option value="Beldibi">Beldibi</option> <option value="Siteler">Siteler</option> <option value="Turunç">Turunç</option> <option value="Orhaniye">Orhaniye</option> <option value="Selimiye">Selimiye</option> <option value="Bozburun">Bozburun</option> <option value="Söğüt">Söğüt</option> <option value="Hisarönü">Hisarönü</option> <option value="Datça Yolu">Datça Yolu</option> </select> <select id="filter-type" class="px-4 py-3 rounded-xl bg-white text-gray-800 font-medium focus:ring-2 focus:ring-amber-400"> <option value="">Tüm Türler</option> <option value="Satılık">Satılık</option> <option value="Kiralık">Kiralık</option> </select> <select id="filter-property" class="px-4 py-3 rounded-xl bg-white text-gray-800 font-medium focus:ring-2 focus:ring-amber-400"> <option value="">Tüm Türler</option> <option value="Daire">Daire</option> <option value="Villa">Villa</option> <option value="Bina">Bina</option> <option value="Arsa">Arsa</option> <option value="İşyeri">İşyeri</option> </select> <button id="btn-search" class="bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold px-6 py-3 rounded-xl transition">Ara</button>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+       <select id="filter-region" class="px-4 py-3 rounded-xl bg-white text-gray-800 font-medium focus:ring-2 focus:ring-amber-400"> <option value="">Tüm Bölgeler</option> <option value="Merkez">Merkez</option> <option value="İçmeler">İçmeler</option> <option value="Armutalan">Armutalan</option> <option value="Beldibi">Beldibi</option> <option value="Siteler">Siteler</option> <option value="Turunç">Turunç</option> <option value="Orhaniye">Orhaniye</option> <option value="Selimiye">Selimiye</option> <option value="Bozburun">Bozburun</option> <option value="Söğüt">Söğüt</option> <option value="Hisarönü">Hisarönü</option> <option value="Datça Yolu">Datça Yolu</option> </select> <select id="filter-type" class="px-4 py-3 rounded-xl bg-white text-gray-800 font-medium focus:ring-2 focus:ring-amber-400"> <option value="">Tüm Türler</option> <option value="Satılık">Satılık</option> <option value="Kiralık">Kiralık</option> </select> <select id="filter-property" class="px-4 py-3 rounded-xl bg-white text-gray-800 font-medium focus:ring-2 focus:ring-amber-400"> <option value="">Tüm Türler</option> <option value="Daire">Daire</option> <option value="Villa">Villa</option> <option value="Bina">Bina</option> <option value="Arsa">Arsa</option> <option value="İşyeri">İşyeri</option> </select> <button id="btn-search" class="bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold px-6 py-3 rounded-xl transition">Ara</button>
       </div>
      </div>
     </div>
@@ -128,7 +132,8 @@
     <div class="max-w-7xl mx-auto">
      <h2 class="font-heading text-3xl font-bold text-gray-800 mb-2">Aktif İlanlar</h2>
      <p class="text-gray-600 mb-8">Tüm mevcut ilanlarımız</p>
-     <div id="properties-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"><!-- Properties will be loaded here -->
+     <div id="properties-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Properties will be loaded here -->
       <div class="col-span-full text-center py-12 text-gray-500">
        <p class="text-lg">Henüz ilan yok. Aşağıdan ilk ilanınızı ekleyin.</p>
       </div>
@@ -141,39 +146,53 @@
      <p class="text-gray-600 mb-8">Mülkünüzü hızlı ve kolay bir şekilde ilanını yayınlayın</p>
      <form id="property-form" class="bg-white rounded-2xl shadow-lg p-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-       <div><label class="block text-gray-700 font-semibold mb-2">İlan Başlığı *</label> <input type="text" id="form-title" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="Güzel Villa">
+       <div>
+        <label class="block text-gray-700 font-semibold mb-2">İlan Başlığı *</label> <input type="text" id="form-title" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="Güzel Villa">
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">İlan Türü *</label> <select id="form-type" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent"> <option value="">Seçiniz</option> <option value="Satılık">Satılık</option> <option value="Kiralık">Kiralık</option> </select>
+       <div>
+        <label class="block text-gray-700 font-semibold mb-2">İlan Türü *</label> <select id="form-type" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent"> <option value="">Seçiniz</option> <option value="Satılık">Satılık</option> <option value="Kiralık">Kiralık</option> </select>
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">Emlak Türü *</label> <select id="form-property" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent"> <option value="">Seçiniz</option> <option value="Daire">Daire</option> <option value="Villa">Villa</option> <option value="Bina">Bina</option> <option value="Arsa">Arsa</option> <option value="İşyeri">İşyeri</option> </select>
+       <div>
+        <label class="block text-gray-700 font-semibold mb-2">Emlak Türü *</label> <select id="form-property" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent"> <option value="">Seçiniz</option> <option value="Daire">Daire</option> <option value="Villa">Villa</option> <option value="Bina">Bina</option> <option value="Arsa">Arsa</option> <option value="İşyeri">İşyeri</option> </select>
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">Bölge *</label> <select id="form-region" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent"> <option value="">Seçiniz</option> <option value="Merkez">Merkez</option> <option value="İçmeler">İçmeler</option> <option value="Armutalan">Armutalan</option> <option value="Beldibi">Beldibi</option> <option value="Siteler">Siteler</option> <option value="Turunç">Turunç</option> <option value="Orhaniye">Orhaniye</option> <option value="Selimiye">Selimiye</option> <option value="Bozburun">Bozburun</option> <option value="Söğüt">Söğüt</option> <option value="Hisarönü">Hisarönü</option> <option value="Datça Yolu">Datça Yolu</option> </select>
+       <div>
+        <label class="block text-gray-700 font-semibold mb-2">Bölge *</label> <select id="form-region" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent"> <option value="">Seçiniz</option> <option value="Merkez">Merkez</option> <option value="İçmeler">İçmeler</option> <option value="Armutalan">Armutalan</option> <option value="Beldibi">Beldibi</option> <option value="Siteler">Siteler</option> <option value="Turunç">Turunç</option> <option value="Orhaniye">Orhaniye</option> <option value="Selimiye">Selimiye</option> <option value="Bozburun">Bozburun</option> <option value="Söğüt">Söğüt</option> <option value="Hisarönü">Hisarönü</option> <option value="Datça Yolu">Datça Yolu</option> </select>
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">Fiyat *</label> <input type="text" id="form-price" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="500.000 TL">
+       <div>
+        <label class="block text-gray-700 font-semibold mb-2">Fiyat *</label> <input type="text" id="form-price" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="500.000 TL">
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">Metrekare *</label> <input type="text" id="form-area" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="150 m²">
+       <div>
+        <label class="block text-gray-700 font-semibold mb-2">Metrekare *</label> <input type="text" id="form-area" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="150 m²">
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">Oda Sayısı</label> <input type="text" id="form-rooms" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="3">
+       <div>
+        <label class="block text-gray-700 font-semibold mb-2">Oda Sayısı</label> <input type="text" id="form-rooms" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="3">
        </div>
-       <div><label class="block text-gray-700 font-semibold mb-2">Banyo Sayısı</label> <input type="text" id="form-bathrooms" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="2">
+       <div>
+        <label class="block text-gray-700 font-semibold mb-2">Banyo Sayısı</label> <input type="text" id="form-bathrooms" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="2">
        </div>
       </div>
-      <div class="mb-6"><label class="block text-gray-700 font-semibold mb-2">Açıklama</label> <textarea id="form-description" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" rows="4" placeholder="Mülk hakkında detaylı bilgi..."></textarea>
+      <div class="mb-6">
+       <label class="block text-gray-700 font-semibold mb-2">Açıklama</label> <textarea id="form-description" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" rows="4" placeholder="Mülk hakkında detaylı bilgi..."></textarea>
       </div>
-      <div class="mb-6"><label class="block text-gray-700 font-semibold mb-2">Mülk Fotoğrafı</label>
-       <div class="relative"><input type="file" id="form-image" accept="image/*" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent">
+      <div class="mb-6">
+       <label class="block text-gray-700 font-semibold mb-2">Mülk Fotoğrafı</label>
+       <div class="relative">
+        <input type="file" id="form-image" accept="image/*" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent">
         <p class="text-gray-500 text-xs mt-2">📸 JPG, PNG veya WebP formatında (Max 2MB)</p>
        </div>
-       <div id="image-preview" class="mt-4 hidden"><img id="preview-img" src="" alt="Resim Önizlemesi" class="h-32 w-32 object-cover rounded-lg border-2 border-amber-400"> <button type="button" id="remove-image" class="mt-2 text-red-600 text-sm hover:underline">Resmi Kaldır</button>
+       <div id="image-preview" class="mt-4 hidden">
+        <img id="preview-img" src="" alt="Resim Önizlemesi" class="h-32 w-32 object-cover rounded-lg border-2 border-amber-400"> <button type="button" id="remove-image" class="mt-2 text-red-600 text-sm hover:underline">Resmi Kaldır</button>
        </div>
       </div><!-- Location Section -->
       <div class="mb-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
        <h3 class="font-heading text-lg font-bold text-gray-800 mb-4">📍 Konum Bilgileri</h3>
        <p class="text-gray-600 text-sm mb-4">Haritada mülkün konumunu işaretleyin veya koordinatları girin</p>
        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div><label class="block text-gray-700 font-semibold mb-2">Enlem (Latitude)</label> <input type="text" id="form-latitude" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="36.8841">
+        <div>
+         <label class="block text-gray-700 font-semibold mb-2">Enlem (Latitude)</label> <input type="text" id="form-latitude" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="36.8841">
         </div>
-        <div><label class="block text-gray-700 font-semibold mb-2">Boylam (Longitude)</label> <input type="text" id="form-longitude" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="28.2744">
+        <div>
+         <label class="block text-gray-700 font-semibold mb-2">Boylam (Longitude)</label> <input type="text" id="form-longitude" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent" placeholder="28.2744">
         </div>
        </div>
        <div id="location-map" style="height: 300px; border-radius: 8px; border: 2px solid #e5e7eb;"></div>
@@ -325,12 +344,29 @@
               <div><span class="text-gray-600">Alan:</span> <span class="font-semibold">${prop.area}</span></div>
               <div><span class="text-gray-600">Oda:</span> <span class="font-semibold">${prop.rooms || '-'}</span></div>
             </div>
-            <div class="border-t pt-4">
+            <div class="border-t pt-4 flex items-center justify-between">
               <p class="text-2xl font-bold text-amber-500">${prop.price}</p>
+              <button class="delete-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-semibold transition" data-id="${prop.__backendId}">Sil</button>
             </div>
           </div>
         </div>
       `).join('');
+
+      // Silme butonlarına event listener ekle
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const propId = btn.getAttribute('data-id');
+          const propToDelete = properties.find(p => p.__backendId === propId);
+          
+          if (propToDelete && window.dataSdk) {
+            const result = await window.dataSdk.delete(propToDelete);
+            if (!result.isOk) {
+              console.error('Silme hatası:', result.error);
+            }
+          }
+        });
+      });
     }
 
     // Form submission
@@ -436,14 +472,31 @@
                 <div><span class="text-gray-600">Alan:</span> <span class="font-semibold">${prop.area}</span></div>
                 <div><span class="text-gray-600">Oda:</span> <span class="font-semibold">${prop.rooms || '-'}</span></div>
               </div>
-              <div class="border-t pt-4">
+              <div class="border-t pt-4 flex items-center justify-between">
                 <p class="text-2xl font-bold text-amber-500">${prop.price}</p>
+                <button class="delete-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-semibold transition" data-id="${prop.__backendId}">Sil</button>
               </div>
             </div>
           </div>
         `).join('');
+        
+        // Silme butonlarına event listener ekle
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const propId = btn.getAttribute('data-id');
+            const propToDelete = properties.find(p => p.__backendId === propId);
+            
+            if (propToDelete && window.dataSdk) {
+              const result = await window.dataSdk.delete(propToDelete);
+              if (!result.isOk) {
+                console.error('Silme hatası:', result.error);
+              }
+            }
+          });
+        });
       }
     });
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9db239858343561e',t:'MTc3MzMxMjQ4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9db2472740d9561e',t:'MTc3MzMxMzA0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
